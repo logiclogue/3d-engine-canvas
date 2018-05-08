@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify index.js > build.js"
   },
   "author": "Jordan Lord (http://jordanlord.co.uk)",
   "license": "ISC",
