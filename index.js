@@ -1,23 +1,75 @@
 var numjs = require("numjs");
 
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
-}
-
-function pointFromArray(array) {
-    return new Point(array[0], array[1]);
-}
-
 function drawPoint(ctx, point) {
-    ctx.moveTo(point.x, point.y);
-    ctx.lineTo(point.x + 5, point.y + 5);
+    ctx.moveTo(point[0], point[1]);
+    ctx.lineTo(point[0] + 5, point[1] + 5);
     ctx.stroke();
+}
+
+function rotateX(vector, angle) {
+    var cos = Math.cos(angle);
+    var sin = Math.sin(angle);
+    var matrix = numjs.array([
+        [1, 0, 0],
+        [0, cos, sin],
+        [0, -sin, cos]
+    ]);
+
+    return matrix.dot(vector);
+}
+
+function rotateY(vector, angle) {
+    var cos = Math.cos(angle);
+    var sin = Math.sin(angle);
+    var matrix = numjs.array([
+        [cos, 0, -sin],
+        [0, 1, 0],
+        [sin, 0, cos]
+    ]);
+
+    return matrix.dot(vector);
+}
+
+function scale(vector, factor) {
+    var matrix = numjs.array([
+        [factor, 0, 0],
+        [0, factor, 0],
+        [0, 0, factor]
+    ]);
+
+    return matrix.dot(vector);
+}
+
+function rotateXY(vector, xAngle, yAngle) {
+    return rotateX(rotateY(vector));
+}
+
+function projection(vector) {
+    var projectionMatrix = numjs.array([
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]);
+
+    return projectionMatrix.dot(vector);
 }
 
 (function () {
     var canvas = document.getElementById("my-canvas");
     var ctx = canvas.getContext("2d");
 
-    drawPoint(ctx, new Point(10, 10));
+    var cube = numjs.array([
+        [0, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        [0, 1, 1],
+        [1, 0, 0],
+        [1, 0, 1],
+        [1, 1, 0],
+        [1, 1, 1]
+    ]).T;
+
+    console.log(projection(cube).T.tolist());
+
+    //drawPoint(ctx, point);
 }());
