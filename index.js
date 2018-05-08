@@ -41,7 +41,7 @@ function scale(vector, factor) {
 }
 
 function rotateXY(vector, xAngle, yAngle) {
-    return rotateX(rotateY(vector));
+    return rotateX(rotateY(vector, yAngle), xAngle);
 }
 
 function projection(vector) {
@@ -69,7 +69,9 @@ function projection(vector) {
         [1, 1, 1]
     ]).T;
 
-    console.log(projection(cube).T.tolist());
-
-    //drawPoint(ctx, point);
+    scale(projection(rotateXY(cube, 0, 0)), 50).T
+        .tolist()
+        .forEach(function (point) {
+            drawPoint(ctx, point);
+        });
 }());
