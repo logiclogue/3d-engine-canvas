@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^16.2.0",
+    "browserify-shim": "^3.8.14",
     "numjs": "^0.15.1"
   }
 }
