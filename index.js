@@ -55,6 +55,12 @@ function projection(vector) {
     return projectionMatrix.dot(vector);
 }
 
+function shiftXY(vector, x, y) {
+    var matrix = numjs.array([x, y, 0]);
+
+    return vector;
+}
+
 (function () {
     var canvas = document.getElementById("my-canvas");
     var ctx = canvas.getContext("2d");
@@ -79,7 +85,7 @@ function projection(vector) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = "#FFFFFF";
-        scale(projection(rotateXY(cube, i, i / 10)), 200).T
+        scale(shiftXY(projection(rotateXY(cube, i, i / 10)), 1, 0), 200).T
             .tolist()
             .forEach(function (point) {
                 drawPoint(ctx, point);
