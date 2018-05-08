@@ -7,5 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jordan Lord (http://jordanlord.co.uk)",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.2.0",
+    "numjs": "^0.15.1"
+  }
 }
