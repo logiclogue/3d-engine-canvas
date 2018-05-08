@@ -1,9 +1,10 @@
 var numjs = require("numjs");
 
 function drawPoint(ctx, point) {
-    ctx.moveTo(point[0], point[1]);
-    ctx.lineTo(point[0] + 5, point[1] + 5);
-    ctx.stroke();
+    var x = point[0];
+    var y = point[1];
+
+    ctx.fillRect(x, y, 5, 5);
 }
 
 function rotateX(vector, angle) {
@@ -69,9 +70,19 @@ function projection(vector) {
         [1, 1, 1]
     ]).T;
 
-    scale(projection(rotateXY(cube, Math.PI / 10, -Math.PI / 5)), 50).T
-        .tolist()
-        .forEach(function (point) {
-            drawPoint(ctx, point);
-        });
+    var i = 0;
+
+    setInterval(function () {
+        i += 0.01;
+
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#FFFFFF";
+        scale(projection(rotateXY(cube, i, i / 10)), 200).T
+            .tolist()
+            .forEach(function (point) {
+                drawPoint(ctx, point);
+            });
+    }, 1);
 }());
