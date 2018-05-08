@@ -69,7 +69,7 @@ function projection(vector) {
         [1, 1, 1]
     ]).T;
 
-    scale(projection(rotateXY(cube, 0, 0)), 50).T
+    scale(projection(rotateXY(cube, Math.PI / 10, -Math.PI / 5)), 50).T
         .tolist()
         .forEach(function (point) {
             drawPoint(ctx, point);
