@@ -93,8 +93,8 @@ function shiftXY(vector, x, y) {
 
     var i = 0;
 
-    setInterval(function () {
-        i += 0.01;
+    function update() {
+        i += 0.05;
 
         ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -104,5 +104,9 @@ function shiftXY(vector, x, y) {
             .forEach(function (point) {
                 drawPoint(ctx, point);
             });
-    }, 1);
+
+        requestAnimationFrame(update);
+    }
+
+    update();
 }());
