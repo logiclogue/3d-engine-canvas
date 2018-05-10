@@ -55,6 +55,19 @@ function projection(vector) {
     return mathjs.multiply(projectionMatrix, vector);
 }
 
+function add(matrix, vector) {
+    var result = mathjs.transpose(matrix)
+        .map(v => mathjs.add(v, vector));
+
+    return mathjs.transpose(result);
+}
+
+function shiftX(vector, x) {
+    var shifter = [x, 0, 0];
+
+    return add(vector, shifter);
+}
+
 function shiftXY(vector, x, y) {
     var matrix = [x, y, 0];
 
@@ -87,7 +100,7 @@ function shiftXY(vector, x, y) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = "#FFFFFF";
-        mathjs.transpose(scale(shiftXY(projection(rotateXY(cube, i, i / 10)), 1, 0), 200))
+        mathjs.transpose(scale(shiftX(projection(rotateXY(cube, i, i / 10)), 1, 0), 200))
             .forEach(function (point) {
                 drawPoint(ctx, point);
             });
