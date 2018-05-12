@@ -8,7 +8,9 @@
   ],
   "dependencies": {
     "purescript-prelude": "^3.3.0",
-    "purescript-console": "^3.0.0"
+    "purescript-console": "^3.0.0",
+    "purescript-linear-algebra": "^0.4.0",
+    "purescript-canvas": "^3.3.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0"
