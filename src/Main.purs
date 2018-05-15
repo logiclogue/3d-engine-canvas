@@ -7,6 +7,8 @@ import Data.Maybe (Maybe(..))
 import Graphics.Canvas (
     CANVAS, rect, fillPath, setFillStyle, getContext2D, getCanvasElementById)
 import Partial.Unsafe (unsafePartial)
+import DOM.HTML (window)
+import DOM.HTML.Window (requestAnimationFrame)
 
 main :: Eff (canvas :: CANVAS) Unit
 main = void $ unsafePartial do
