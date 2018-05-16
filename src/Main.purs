@@ -3,7 +3,7 @@ module Main where
 import Prelude
 
 import Control.Monad.Eff (Eff)
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Graphics.Canvas (
     CANVAS, Context2D, rect, fillPath, setFillStyle, getContext2D,
     getCanvasElementById, clearRect)
@@ -13,6 +13,7 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Int (toNumber)
+import LinearAlgebra.Matrix (Matrix, fromArray, zeros)
 
 type Point = {
     x :: Number,
@@ -38,6 +39,15 @@ drawPoint ctx point = do
             h: 5.0
         }
 
+toTransformationMatrix :: Array Number -> Matrix Number
+toTransformationMatrix = fromMaybe (zeros 3 3) <<< fromArray 3 3
+
+projectionMatrix :: Matrix Number
+projectionMatrix = toTransformationMatrix [
+    1.0, 0.0, 0.0,
+    0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0]
+
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
     _ <- clearRect ctx $
@@ -48,7 +58,7 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawPoint ctx { x: toNumber x, y: 0.0 }
+    _ <- drawPoint ctx { x: toNumber x, y: toNumber x }
 
     win <- window
 
