@@ -11,9 +11,10 @@ import Partial.Unsafe (unsafePartial)
 import DOM (DOM)
 import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, fromArray, zeros)
+import Math (sin, cos)
 
 type Point = {
     x :: Number,
@@ -47,6 +48,18 @@ projectionMatrix = toTransformationMatrix [
     1.0, 0.0, 0.0,
     0.0, 1.0, 0.0,
     0.0, 0.0, 0.0]
+
+xRotationMatrix :: Number -> Matrix Number
+xRotationMatrix angle = toTransformationMatrix [
+    1.0, 0.0, 0.0,
+    0.0, cos angle, sin angle,
+    0.0, -sin angle, cos angle]
+
+yRotationMatrix :: Number -> Matrix Number
+yRotationMatrix angle = toTransformationMatrix [
+    cos angle, 0.0, -sin angle,
+    0.0, 1.0, 0.0,
+    sin angle, 0.0, cos angle]
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
