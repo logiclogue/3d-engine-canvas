@@ -13,7 +13,7 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
-import LinearAlgebra.Matrix (Matrix, fromArray, zeros)
+import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose)
 import Math (sin, cos)
 
 type Point = {
@@ -40,8 +40,11 @@ drawPoint ctx point = do
             h: 5.0
         }
 
+toMatrix :: Int -> Int -> Array Number -> Matrix Number
+toMatrix r c = fromMaybe (zeros r c) <<< fromArray r c
+
 toTransformationMatrix :: Array Number -> Matrix Number
-toTransformationMatrix = fromMaybe (zeros 3 3) <<< fromArray 3 3
+toTransformationMatrix = toMatrix 3 3
 
 projectionMatrix :: Matrix Number
 projectionMatrix = toTransformationMatrix [
@@ -60,6 +63,17 @@ yRotationMatrix angle = toTransformationMatrix [
     cos angle, 0.0, -sin angle,
     0.0, 1.0, 0.0,
     sin angle, 0.0, cos angle]
+
+cube :: Matrix Number
+cube = (transpose <<< (toMatrix 8 3)) [
+    0.0, 0.0, 0.0,
+    0.0, 0.0, 1.0,
+    0.0, 1.0, 0.0,
+    0.0, 1.0, 1.0,
+    1.0, 0.0, 0.0,
+    1.0, 0.0, 1.0,
+    1.0, 1.0, 0.0,
+    1.0, 1.0, 1.0]
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
