@@ -4,6 +4,7 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Array ((!!))
 import Graphics.Canvas (
     CANVAS, Context2D, rect, fillPath, setFillStyle, getContext2D,
     getCanvasElementById, clearRect)
@@ -14,6 +15,7 @@ import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose)
+import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
 
 type Point = {
@@ -64,6 +66,12 @@ yRotationMatrix angle = toTransformationMatrix [
     0.0, 1.0, 0.0,
     sin angle, 0.0, cos angle]
 
+scaleMatrix :: Number -> Matrix Number
+scaleMatrix factor = toTransformationMatrix [
+    factor, 0.0, 0.0,
+    0.0, factor, 0.0,
+    0.0, 0.0, factor]
+
 cube :: Matrix Number
 cube = (transpose <<< (toMatrix 8 3)) [
     0.0, 0.0, 0.0,
@@ -74,6 +82,13 @@ cube = (transpose <<< (toMatrix 8 3)) [
     1.0, 0.0, 1.0,
     1.0, 1.0, 0.0,
     1.0, 1.0, 1.0]
+
+vectorToPoint :: Vector Number -> Point
+vectorToPoint vector =
+    {
+        x: fromMaybe 0.0 (vector !! 0),
+        y: fromMaybe 0.0 (vector !! 1)
+    }
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
