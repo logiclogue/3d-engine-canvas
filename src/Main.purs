@@ -42,6 +42,10 @@ drawPoint ctx point = do
             h: 5.0
         }
 
+drawPoints :: forall eff. Context2D -> Array Point -> Eff (canvas :: CANVAS | eff) Context2D
+drawPoints ctx points = foldr mapped where
+    mapped = map points (drawPoint ctx)
+
 toMatrix :: Int -> Int -> Array Number -> Matrix Number
 toMatrix r c = fromMaybe (zeros r c) <<< fromArray r c
 
