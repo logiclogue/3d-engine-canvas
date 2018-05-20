@@ -14,9 +14,10 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
-import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose)
+import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns)
 import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
+import Data.Foldable (foldl)
 
 type Point = {
     x :: Number,
@@ -41,10 +42,6 @@ drawPoint ctx point = do
             w: 5.0,
             h: 5.0
         }
-
-drawPoints :: forall eff. Context2D -> Array Point -> Eff (canvas :: CANVAS | eff) Context2D
-drawPoints ctx points = foldr mapped where
-    mapped = map points (drawPoint ctx)
 
 toMatrix :: Int -> Int -> Array Number -> Matrix Number
 toMatrix r c = fromMaybe (zeros r c) <<< fromArray r c
@@ -93,6 +90,14 @@ vectorToPoint vector =
         x: fromMaybe 0.0 (vector !! 0),
         y: fromMaybe 0.0 (vector !! 1)
     }
+
+--drawVector :: forall eff. Context2D -> Vector Number -> Eff (cavnas :: CANVAS | eff) Context2D
+drawVector ctx vector = drawPoint ctx (vectorToPoint vector)
+
+--drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Context2D
+--drawMatrix ctx matrix = foldl (>>=) ctx mapped where
+--    mapped = map (drawPoint ctx <<< vectorToPoint) vectors
+--    vectors = columns matrix
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
