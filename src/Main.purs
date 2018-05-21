@@ -91,13 +91,15 @@ vectorToPoint vector =
         y: fromMaybe 0.0 (vector !! 1)
     }
 
---drawVector :: forall eff. Context2D -> Vector Number -> Eff (cavnas :: CANVAS | eff) Context2D
-drawVector ctx vector = drawPoint ctx (vectorToPoint vector)
+drawVector :: forall eff. Context2D -> Vector Number -> Eff (canvas :: CANVAS | eff) Context2D
+drawVector ctx = drawPoint ctx <<< vectorToPoint
 
---drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Context2D
---drawMatrix ctx matrix = foldl (>>=) ctx mapped where
---    mapped = map (drawPoint ctx <<< vectorToPoint) vectors
---    vectors = columns matrix
+drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Context2D
+drawMatrix ctx matrix = foldl (>>=) ctx mapped where
+    mapped :: Array (Context2D -> Eff (canvas :: CANVAS | eff) Context2D)
+    mapped = map (\v ctx' -> drawVector ctx' v) vectors
+    vectors :: Array (Vector Number)
+    vectors = columns matrix
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
