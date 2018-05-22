@@ -17,7 +17,7 @@ import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns)
 import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
-import Data.Foldable (foldl)
+import Data.Foldable (fold)
 
 type Point = {
     x :: Number,
@@ -95,9 +95,9 @@ drawVector :: forall eff. Context2D -> Vector Number -> Eff (canvas :: CANVAS | 
 drawVector ctx = drawPoint ctx <<< vectorToPoint
 
 drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Context2D
-drawMatrix ctx matrix = foldl (>>=) ctx mapped where
+drawMatrix ctx matrix = fold (>>=) mapped where
     mapped :: Array (Context2D -> Eff (canvas :: CANVAS | eff) Context2D)
-    mapped = map (\v ctx' -> drawVector ctx' v) vectors
+    mapped = map (drawVector ctx) vectors
     vectors :: Array (Vector Number)
     vectors = columns matrix
 
