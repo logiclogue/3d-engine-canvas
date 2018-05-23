@@ -14,10 +14,10 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
-import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns)
+import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns, multiply)
 import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
-import Data.Foldable (fold)
+import Data.Foldable (for_)
 
 type Point = {
     x :: Number,
@@ -94,11 +94,8 @@ vectorToPoint vector =
 drawVector :: forall eff. Context2D -> Vector Number -> Eff (canvas :: CANVAS | eff) Context2D
 drawVector ctx = drawPoint ctx <<< vectorToPoint
 
-drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Context2D
-drawMatrix ctx matrix = fold (>>=) mapped where
-    mapped :: Array (Context2D -> Eff (canvas :: CANVAS | eff) Context2D)
-    mapped = map (drawVector ctx) vectors
-    vectors :: Array (Vector Number)
+drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Unit
+drawMatrix ctx matrix = for_ vectors (drawVector ctx) where
     vectors = columns matrix
 
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
@@ -112,6 +109,7 @@ tick ctx x = void do
         }
 
     _ <- drawPoint ctx { x: toNumber x, y: toNumber x }
+    _ <- drawMatrix ctx ((yRotationMatrix (toNumber x / 100.0)) `multiply` (xRotationMatrix (toNumber x / 100.0)) `multiply`(scaleMatrix 100.0) `multiply` cube)
 
     win <- window
 
