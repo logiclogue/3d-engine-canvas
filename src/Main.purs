@@ -17,7 +17,7 @@ import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns, multiply)
 import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
-import Data.Foldable (for_)
+import Data.Foldable (for_, foldr)
 
 type Point = {
     x :: Number,
@@ -108,8 +108,7 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawPoint ctx { x: toNumber x, y: toNumber x }
-    _ <- drawMatrix ctx ((yRotationMatrix (toNumber x / 100.0)) `multiply` (xRotationMatrix (toNumber x / 100.0)) `multiply`(scaleMatrix 100.0) `multiply` cube)
+    _ <- drawMatrix ctx (foldr multiply cube [yRotationMatrix (toNumber x / 30.0), xRotationMatrix (toNumber x / 30.0), scaleMatrix 100.0])
 
     win <- window
 
