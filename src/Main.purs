@@ -18,7 +18,6 @@ import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns, rows,
 import LinearAlgebra.Vector (Vector)
 import Math (sin, cos)
 import Data.Foldable (for_, foldr)
-import Data.Semigroup ((<>))
 
 type Point = {
     x :: Number,
@@ -99,9 +98,9 @@ drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | 
 drawMatrix ctx matrix = for_ vectors (drawVector ctx) where
     vectors = columns matrix
 
-mapColumns :: forall a b. (Vector a -> Vector b -> Vector b) -> Matrix a -> Matrix b
+mapColumns :: forall a. (Vector a -> Vector a) -> Matrix a -> Matrix a
 mapColumns f m = fromMaybe m $ fromArray x y array where
-    array = foldr (<>) [] (map f xs)
+    array = foldr append [] (map f xs)
     xs = columns m
     x = length xs
     y = length (rows m)
