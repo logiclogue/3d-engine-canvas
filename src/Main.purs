@@ -16,6 +16,7 @@ import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, fromArray, zeros, transpose, columns, rows, multiply)
 import LinearAlgebra.Vector (Vector)
+import LinearAlgebra.Vector (add) as Vector
 import Math (sin, cos)
 import Data.Foldable (for_, foldr)
 
@@ -105,6 +106,9 @@ mapColumns f m = fromMaybe m $ fromArray x y array where
     x = length xs
     y = length (rows m)
 
+shiftRight :: Number -> Matrix Number -> Matrix Number
+shiftRight n matrix = mapColumns (\v -> Vector.add v [n, 0.0]) matrix
+
 tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
 tick ctx x = void do
     _ <- clearRect ctx $
@@ -115,7 +119,7 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawMatrix ctx (foldr multiply cube [yRotationMatrix (toNumber x / 30.0), xRotationMatrix (toNumber x / 30.0), scaleMatrix 100.0])
+    _ <- drawMatrix ctx $ shiftRight 50.0 (foldr multiply cube [yRotationMatrix (toNumber x / 30.0), xRotationMatrix (toNumber x / 30.0), scaleMatrix 100.0])
 
     win <- window
 
