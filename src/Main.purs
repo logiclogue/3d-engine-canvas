@@ -14,11 +14,11 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE)
 import Data.Int (toNumber)
-import LinearAlgebra.Matrix (Matrix, transpose, columns, multiply)
+import LinearAlgebra.Matrix (Matrix, transpose, columns)
 import LinearAlgebra.Vector (Vector)
-import Data.Foldable (for_, foldr)
+import Data.Foldable (for_)
 import MatrixHelpers (toMatrix)
-import TransformationMatrices (yRotationMatrix, xRotationMatrix, scaleMatrix)
+import MatrixFunctions (rotateX, rotateY, scale, shiftX)
 
 type Point = {
     x :: Number,
@@ -79,7 +79,7 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawMatrix ctx $ foldr multiply cube [yRotationMatrix (toNumber x / 30.0), xRotationMatrix (toNumber x / 30.0), scaleMatrix 100.0]
+    _ <- drawMatrix ctx $ (rotateY (toNumber x / 30.0) <<< rotateX (toNumber x / 30.0) <<< scale 100.0 <<< shiftX (0.5)) cube
 
     win <- window
 
