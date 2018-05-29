@@ -18,7 +18,7 @@ import LinearAlgebra.Matrix (Matrix, transpose, columns)
 import LinearAlgebra.Vector (Vector)
 import Data.Foldable (for_)
 import MatrixHelpers (toMatrix)
-import MatrixFunctions (rotateX, rotateY, scale, shiftX)
+import MatrixFunctions (rotateX, rotateY, scale, shift)
 
 type Point = {
     x :: Number,
@@ -79,7 +79,9 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawMatrix ctx $ (rotateY (toNumber x / 30.0) <<< rotateX (toNumber x / 30.0) <<< scale 100.0 <<< shiftX (0.5)) cube
+    _ <- drawMatrix ctx $ (
+        scale 100.0 <<< shift [1.0, 1.0, 0.0] <<< rotateY (toNumber x / 30.0)
+        <<< rotateX (toNumber x / 30.0) <<< shift [-0.5, -0.5, 0.0]) cube
 
     win <- window
 
