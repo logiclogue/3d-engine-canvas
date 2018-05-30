@@ -81,7 +81,7 @@ tick ctx x = void do
 
     _ <- drawMatrix ctx $ (
         scale 100.0 <<< shift [1.0, 1.0, 0.0] <<< rotateY (toNumber x / 30.0)
-        <<< rotateX (toNumber x / 30.0) <<< shift [-0.5, -0.5, 0.0]) cube
+        <<< rotateX (toNumber x / 30.0) <<< shift [-0.5, -0.5, -0.5]) cube
 
     win <- window
 
