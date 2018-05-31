@@ -5,6 +5,7 @@ import MatrixHelpers (mapColumns)
 import LinearAlgebra.Matrix (Matrix, multiply)
 import LinearAlgebra.Vector (add) as Vector
 import LinearAlgebra.Vector (Vector)
+import Transformable (Transformable)
 
 rotateX :: Number -> Matrix Number -> Matrix Number
 rotateX angle m = xRotationMatrix angle `multiply` m
@@ -26,3 +27,7 @@ shiftY n = shift [0.0, n, 0.0]
 
 shiftZ :: Number -> Matrix Number -> Matrix Number
 shiftZ n = shift [0.0, 0.0, n]
+
+instance transformableMatrix :: Transformable (Matrix Number) where
+    rotateX angle m = xRotationMatrix angle `multiply` m
+    rotateY angle m = yRotationMatrix angle `multiply` m
