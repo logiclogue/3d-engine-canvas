@@ -23,6 +23,12 @@ yRotationMatrix angle = toTransformationMatrix [
     0.0, 1.0, 0.0,
     sin angle, 0.0, cos angle]
 
+zRotationMatrix :: Number -> Matrix Number
+zRotationMatrix angle = toTransformationMatrix [
+    cos angle, sin angle, 0.0,
+    -sin angle, cos angle, 0.0,
+    0.0, 0.0, 1.0]
+
 scaleMatrix :: Number -> Matrix Number
 scaleMatrix factor = toTransformationMatrix [
     factor, 0.0, 0.0,

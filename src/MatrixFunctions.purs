@@ -1,33 +1,17 @@
 module MatrixFunctions where
 
-import TransformationMatrices (xRotationMatrix, yRotationMatrix, scaleMatrix)
+import TransformationMatrices (xRotationMatrix, yRotationMatrix, zRotationMatrix, scaleMatrix)
 import MatrixHelpers (mapColumns)
 import LinearAlgebra.Matrix (Matrix, multiply)
 import LinearAlgebra.Vector (add) as Vector
 import LinearAlgebra.Vector (Vector)
-import Transformable (Transformable)
+import Transformable (class Transformable)
 
-rotateX :: Number -> Matrix Number -> Matrix Number
-rotateX angle m = xRotationMatrix angle `multiply` m
+data MyMatrix = Matrix Number
 
-rotateY :: Number -> Matrix Number -> Matrix Number
-rotateY angle m = yRotationMatrix angle `multiply` m
-
-scale :: Number -> Matrix Number -> Matrix Number
-scale factor m = scaleMatrix factor `multiply` m
-
-shift :: Vector Number -> Matrix Number -> Matrix Number
-shift vector matrix = mapColumns (\v -> Vector.add v vector) matrix
-
-shiftX :: Number -> Matrix Number -> Matrix Number
-shiftX n = shift [n, 0.0, 0.0]
-
-shiftY :: Number -> Matrix Number -> Matrix Number
-shiftY n = shift [0.0, n, 0.0]
-
-shiftZ :: Number -> Matrix Number -> Matrix Number
-shiftZ n = shift [0.0, 0.0, n]
-
-instance transformableMatrix :: Transformable (Matrix Number) where
+instance transformableMatrix :: Transformable (MyMatrix) where
     rotateX angle m = xRotationMatrix angle `multiply` m
     rotateY angle m = yRotationMatrix angle `multiply` m
+    rotateZ angle m = zRotationMatrix angle `multiply` m
+    scale factor m = scaleMatrix factor `multiply` m
+    shift vector m = mapColumns (\v -> Vector.add v vector) m

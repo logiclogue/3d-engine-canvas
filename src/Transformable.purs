@@ -1,4 +1,5 @@
-module Transformable where
+module Transformable (
+    class Transformable, rotateX, rotateY, rotateZ, scale, shift) where
 
 import LinearAlgebra.Vector (Vector)
 
