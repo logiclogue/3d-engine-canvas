@@ -7,7 +7,7 @@ import LinearAlgebra.Vector (add) as Vector
 import LinearAlgebra.Vector (Vector)
 import Transformable (class Transformable)
 
-data MyMatrix = Matrix Number
+newtype MyMatrix = Matrix Number
 
 instance transformableMatrix :: Transformable (MyMatrix) where
     rotateX angle m = xRotationMatrix angle `multiply` m
