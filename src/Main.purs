@@ -12,7 +12,7 @@ import Partial.Unsafe (unsafePartial)
 import DOM (DOM)
 import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
-import Control.Monad.Eff.Console (CONSOLE)
+import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, transpose, columns)
 import LinearAlgebra.Vector (Vector)
@@ -29,6 +29,7 @@ main :: Eff (canvas :: CANVAS, console :: CONSOLE, dom :: DOM) Unit
 main = void $ unsafePartial do
     Just canvas <- getCanvasElementById "my-canvas"
     ctx <- getContext2D canvas
+    _ <- log "HERE"
 
     tick ctx 0
 

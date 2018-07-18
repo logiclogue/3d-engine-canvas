@@ -6,26 +6,21 @@ const htmlPlugin = new HtmlWebPackPlugin({
 });
 
 module.exports = {
-    devtool: "source-maps",
+    devtool: "source-map",
     entry: "./src/Main.purs",
     module: {
         rules: [
             {
                 test: /\.purs$/,
-                use: [
-                    {
-                        loader: "purs-loader",
-                        options: {
-                            src: [
-                                "bower_components/purescript-*/src/**/*.purs",
-                                "src/**/*.purs"
-                            ],
-                            bundle: false,
-                            psc: "psa",
-                            pscIde: false
-                        }
+                use: {
+                    loader: "purs-loader",
+                    options: {
+                        src: [
+                            "bower_components/purescript-*/src/**/*.purs",
+                            "src/**/*.purs"
+                        ]
                     }
-                ]
+                }
             }
         ]
     },
