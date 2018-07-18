@@ -18,7 +18,7 @@ import LinearAlgebra.Matrix (Matrix, transpose, columns)
 import LinearAlgebra.Vector (Vector)
 import Data.Foldable (for_)
 import MatrixHelpers (toMatrix)
-import MatrixFunctions (rotateX, rotateY, scale, shift)
+import Transformable (rotateX, rotateY, scale, shift)
 
 type Point = {
     x :: Number,
