@@ -1,7 +1,8 @@
 module Transformable (
     class Transformable, rotateX, rotateY, rotateZ, scale, shift) where
 
-import TransformationMatrices (xRotationMatrix, yRotationMatrix, zRotationMatrix, scaleMatrix)
+import TransformationMatrices (
+    xRotationMatrix, yRotationMatrix, zRotationMatrix, scaleMatrix)
 import MatrixHelpers (mapColumns)
 import LinearAlgebra.Matrix (Matrix, multiply)
 import LinearAlgebra.Vector (add) as Vector
