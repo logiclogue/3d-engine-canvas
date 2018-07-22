@@ -2,17 +2,16 @@ module Main where
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
+import Effect (Effect)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Array ((!!))
 import Graphics.Canvas (
-    CANVAS, Context2D, rect, fillPath, setFillStyle, getContext2D,
+    Context2D, rect, fillPath, setFillStyle, getContext2D,
     getCanvasElementById, clearRect)
 import Partial.Unsafe (unsafePartial)
-import DOM (DOM)
-import DOM.HTML (window)
-import DOM.HTML.Window (requestAnimationFrame)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Web.HTML (window)
+import Web.HTML.Window (requestAnimationFrame)
+import Effect.Class.Console (log)
 import Data.Int (toNumber)
 import LinearAlgebra.Matrix (Matrix, columns)
 import LinearAlgebra.Vector (Vector)
@@ -27,7 +26,7 @@ type Point = {
     y :: Number
 }
 
-main :: Eff (canvas :: CANVAS, console :: CONSOLE, dom :: DOM) Unit
+main :: Effect Unit
 main = void $ unsafePartial do
     Just canvas <- getCanvasElementById "my-canvas"
     ctx <- getContext2D canvas
@@ -35,17 +34,16 @@ main = void $ unsafePartial do
 
     tick ctx 0
 
-drawPoint :: forall eff. Context2D -> Point -> Eff (canvas :: CANVAS | eff) Context2D
+drawPoint :: Context2D -> Point -> Effect Unit
 drawPoint ctx point = do
-    _ <- setFillStyle "#0000FF" ctx
+    _ <- setFillStyle ctx "#0000FF"
 
-    fillPath ctx $ rect ctx
-        {
-            x: point.x,
-            y: point.y,
-            w: 5.0,
-            h: 5.0
-        }
+    fillPath ctx $ rect ctx {
+        x: point.x,
+        y: point.y,
+        width: 5.0,
+        height: 5.0
+    }
 
 cube :: Cube
 cube = createCube 1.0 1.0 1.0
@@ -60,22 +58,21 @@ vectorToPoint vector =
         y: fromMaybe 0.0 (vector !! 1)
     }
 
-drawVector :: forall eff. Context2D -> Vector Number -> Eff (canvas :: CANVAS | eff) Context2D
+drawVector :: Context2D -> Vector Number -> Effect Unit
 drawVector ctx = drawPoint ctx <<< vectorToPoint
 
-drawMatrix :: forall eff. Context2D -> Matrix Number -> Eff (canvas :: CANVAS | eff) Unit
+drawMatrix :: Context2D -> Matrix Number -> Effect Unit
 drawMatrix ctx matrix = for_ vectors (drawVector ctx) where
     vectors = columns matrix
 
-tick :: forall eff. Context2D -> Int -> Eff (canvas :: CANVAS, dom :: DOM | eff) Unit
+tick :: Context2D -> Int -> Effect Unit
 tick ctx x = void do
-    _ <- clearRect ctx $
-        {
-            x: 0.0,
-            y: 0.0,
-            w: 500.0,
-            h: 500.0
-        }
+    _ <- clearRect ctx $ {
+        x: 0.0,
+        y: 0.0,
+        width: 500.0,
+        height: 500.0
+    }
 
     _ <- drawMatrix ctx $ toMatrix $ (
         scale 100.0 <<<
