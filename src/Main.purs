@@ -83,7 +83,7 @@ tick ctx x = void do
         rotateY (toNumber x / 30.0) <<<
         rotateX (toNumber x / 30.0) <<<
         shift [-0.5, -0.5, -0.5]
-    ) pyramid
+    ) cube
 
     win <- window
 
