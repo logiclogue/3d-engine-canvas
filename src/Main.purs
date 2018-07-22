@@ -20,6 +20,7 @@ import Data.Foldable (for_)
 import Renderable (toMatrix)
 import Transformable (rotateX, rotateY, scale, shift)
 import Cube (Cube, createCube)
+import Pyramid (Pyramid, createPyramid)
 
 type Point = {
     x :: Number,
@@ -48,6 +49,9 @@ drawPoint ctx point = do
 
 cube :: Cube
 cube = createCube 1.0 1.0 1.0
+
+pyramid :: Pyramid
+pyramid = createPyramid 1.0 1.0 1.0
 
 vectorToPoint :: Vector Number -> Point
 vectorToPoint vector =
@@ -79,7 +83,7 @@ tick ctx x = void do
         rotateY (toNumber x / 30.0) <<<
         rotateX (toNumber x / 30.0) <<<
         shift [-0.5, -0.5, -0.5]
-    ) cube
+    ) pyramid
 
     win <- window
 
