@@ -1,12 +1,14 @@
 module Transformable (
     class Transformable, rotateX, rotateY, rotateZ, scale, shift) where
 
+import Prelude (($))
 import TransformationMatrices (
     xRotationMatrix, yRotationMatrix, zRotationMatrix, scaleMatrix)
 import MatrixHelpers (mapColumns)
 import LinearAlgebra.Matrix (Matrix, multiply)
 import LinearAlgebra.Vector (add) as Vector
 import LinearAlgebra.Vector (Vector)
+import Data.Newtype (class Newtype, wrap, unwrap)
 
 class Transformable a where
     rotateX :: Number -> a -> a
@@ -21,3 +23,10 @@ instance transformableMatrixNumber :: Transformable (Matrix Number) where
     rotateZ angle m = zRotationMatrix angle `multiply` m
     scale factor m = scaleMatrix factor `multiply` m
     shift vector m = mapColumns (\v -> Vector.add v vector) m
+
+instance transformableNewtypeMatrixNumber :: Newtype a (Matrix Number) => Transformable a where
+    rotateX angle m = wrap $ rotateX angle (unwrap m)
+    rotateY angle m = wrap $ rotateY angle (unwrap m)
+    rotateZ angle m = wrap $ rotateZ angle (unwrap m)
+    scale factor m = wrap $ scale factor (unwrap m)
+    shift vector m = wrap $ shift vector (unwrap m)

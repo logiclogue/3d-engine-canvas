@@ -14,11 +14,12 @@ import DOM.HTML (window)
 import DOM.HTML.Window (requestAnimationFrame)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Int (toNumber)
-import LinearAlgebra.Matrix (Matrix, transpose, columns)
+import LinearAlgebra.Matrix (Matrix, columns)
 import LinearAlgebra.Vector (Vector)
 import Data.Foldable (for_)
-import MatrixHelpers (toMatrix)
+import Renderable (toMatrix)
 import Transformable (rotateX, rotateY, scale, shift)
+import Cube (Cube, createCube)
 
 type Point = {
     x :: Number,
@@ -45,16 +46,8 @@ drawPoint ctx point = do
             h: 5.0
         }
 
-cube :: Matrix Number
-cube = (transpose <<< (toMatrix 8 3)) [
-    0.0, 0.0, 0.0,
-    0.0, 0.0, 1.0,
-    0.0, 1.0, 0.0,
-    0.0, 1.0, 1.0,
-    1.0, 0.0, 0.0,
-    1.0, 0.0, 1.0,
-    1.0, 1.0, 0.0,
-    1.0, 1.0, 1.0]
+cube :: Cube
+cube = createCube 1.0 1.0 1.0
 
 vectorToPoint :: Vector Number -> Point
 vectorToPoint vector =
@@ -80,9 +73,13 @@ tick ctx x = void do
             h: 500.0
         }
 
-    _ <- drawMatrix ctx $ (
-        scale 100.0 <<< shift [1.0, 1.0, 0.0] <<< rotateY (toNumber x / 30.0)
-        <<< rotateX (toNumber x / 30.0) <<< shift [-0.5, -0.5, -0.5]) cube
+    _ <- drawMatrix ctx $ toMatrix $ (
+        scale 100.0 <<<
+        shift [1.0, 1.0, 0.0] <<<
+        rotateY (toNumber x / 30.0) <<<
+        rotateX (toNumber x / 30.0) <<<
+        shift [-0.5, -0.5, -0.5]
+    ) cube
 
     win <- window
 
