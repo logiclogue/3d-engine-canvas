@@ -7,7 +7,8 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Array ((!!))
 import Graphics.Canvas (
     Context2D, rect, fillPath, setFillStyle, getContext2D,
-    getCanvasElementById, clearRect)
+    getCanvasElementById, clearRect, moveTo, lineTo, closePath, strokePath,
+    beginPath)
 import Partial.Unsafe (unsafePartial)
 import Web.HTML (window)
 import Web.HTML.Window (requestAnimationFrame)
@@ -20,6 +21,8 @@ import Renderable (toMatrix)
 import Transformable (rotateX, rotateY, scale, shift)
 import Cube (Cube, createCube)
 import Pyramid (Pyramid, createPyramid)
+import Pairs (pairs)
+import Data.Tuple (Tuple, fst, snd)
 
 type Point = {
     x :: Number,
@@ -61,9 +64,25 @@ vectorToPoint vector =
 drawVector :: Context2D -> Vector Number -> Effect Unit
 drawVector ctx = drawPoint ctx <<< vectorToPoint
 
+drawLinePoints :: Context2D -> Point -> Point -> Effect Unit
+drawLinePoints ctx pointA pointB = do
+    setFillStyle ctx "#0000FF"
+    strokePath ctx $ do
+        moveTo ctx pointA.x pointA.y
+        lineTo ctx pointB.x pointB.y
+        closePath ctx
+
+drawLine :: Context2D -> Tuple (Vector Number) (Vector Number) -> Effect Unit
+drawLine ctx tuple = drawLinePoints ctx first second
+  where
+    first = vectorToPoint (fst tuple)
+    second = vectorToPoint (snd tuple)
+
 drawMatrix :: Context2D -> Matrix Number -> Effect Unit
-drawMatrix ctx matrix = for_ vectors (drawVector ctx) where
+drawMatrix ctx matrix = for_ vectors (drawVector ctx)
+  where
     vectors = columns matrix
+    allPairs = pairs vectors [0.0, 0.0, 0.0]
 
 tick :: Context2D -> Int -> Effect Unit
 tick ctx x = void do

@@ -16,10 +16,10 @@ createCube width height depth = Cube (
     (transpose <<< (toMatrix 8 3)) [
         0.0,   0.0,    0.0,
         0.0,   0.0,    depth,
-        0.0,   height, 0.0,
         0.0,   height, depth,
-        width, 0.0,    0.0,
-        width, 0.0,    depth,
+        0.0,   height, 0.0,
         width, height, 0.0,
-        width, height, depth]
+        width, height, depth,
+        width, 0.0,    depth,
+        width, 0.0,    0.0]
 )
